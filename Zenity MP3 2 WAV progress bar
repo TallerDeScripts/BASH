@@ -1,0 +1,23 @@
+#!/bin/bash
+####################################################################
+# Convierte todos los archivos .mp3 a .wav mostrando un dispooler
+# Creado por Daniel Martín [ jue, 27 feb. 2014 ]
+# licencia GNU GPL 2.0+
+# versión 1.0.0
+# https://www.facebook.com/pages/Taller-de-Scripts/199500890074622
+####################################################################
+totalfich=$(find -iname "*.mp3" | wc -l);a=0;
+IFS=$(echo -en "\n\b");
+(
+for i in  $(find -iname "*.mp3")
+do
+mpg321 -w "`basename "$i" .mp3`".wav "$i";
+let a=a+1;
+porcentaje=$(($a * 100 / $totalfich));
+echo $porcentaje;
+echo "# Convirtiendo MP3 a WAV\n $porcentaje% completado $a de $totalfich" ;
+done
+) |
+zenity --progress --auto-close --auto-kill
+zenity --info \
+     --text="Conversion MP3 a WAV finalizada." 
